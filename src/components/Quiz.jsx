@@ -1,7 +1,9 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, } from 'react'
 import '../css/Quizapp.css'
 import Button from '@mui/material/Button';
 import { questions } from '../questions/Questions';
+import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 function Quiz() {
     let [index, setIndex] = useState(0);
     let [question, setQuestion] = useState(questions[index]);
@@ -9,6 +11,13 @@ function Quiz() {
     let [score, setScore] = useState(0);
     let [result, setResult] = useState(false);
 
+    const [showStartQuiz, setShowStartQuiz] = useState(false);
+    const handleClick = () => {
+        setShowStartQuiz(true);
+        navigate('/startquiz');
+    }
+
+    const navigate = useNavigate();
     let Option1 = useRef(null);
     let Option2 = useRef(null);
     let Option3 = useRef(null);
@@ -54,24 +63,30 @@ function Quiz() {
     }
 
     return (
-        <div className='container'>
-            <h1>Quiz App</h1>
-            <hr />
-            {result ? <></> : <>
-                <h2>{index + 1}. {question.question}</h2>
-                <ul>
-                    <li ref={Option1} onClick={(e) => { checkAnswer(e, 1) }}>{question.option1}</li>
-                    <li ref={Option2} onClick={(e) => { checkAnswer(e, 2) }}>{question.option2}</li>
-                    <li ref={Option3} onClick={(e) => { checkAnswer(e, 3) }}>{question.option3}</li>
-                    <li ref={Option4} onClick={(e) => { checkAnswer(e, 4) }}>{question.option4}</li>
-                </ul>
-                <Button onClick={next} sx={{ width: '250px', height: '50px', marginLeft: '190px', borderRadius: '8px' }} variant="contained" color='error' size='medium'>Next</Button>
-                <div className='index'>{index + 1} of {questions.length} questions</div>
-            </>}
-            {result ? <>
-                <h2>You Scored {score} out of {questions.length}</h2>
-                <Button onClick={reset} sx={{ width: '250px', height: '50px', marginLeft: '190px', borderRadius: '8px' }} variant="contained" color='error' size='medium'>Reset</Button></> : <></>}
+        <div className='bodyforquiz' >
 
+            <div className='container'>
+                <h1>Quiz App</h1>
+                <hr />
+                {result ? <></> : <>
+                    <h2>{index + 1}. {question.question}</h2>
+                    <ul>
+                        <li ref={Option1} onClick={(e) => { checkAnswer(e, 1) }}>{question.option1}</li>
+                        <li ref={Option2} onClick={(e) => { checkAnswer(e, 2) }}>{question.option2}</li>
+                        <li ref={Option3} onClick={(e) => { checkAnswer(e, 3) }}>{question.option3}</li>
+                        <li ref={Option4} onClick={(e) => { checkAnswer(e, 4) }}>{question.option4}</li>
+                    </ul>
+                    <Button onClick={next} sx={{ width: '250px', height: '50px', marginLeft: '205px', borderRadius: '8px' }} variant="contained" color='error' size='medium'>Next</Button>
+                    <div className='index'>{index + 1} of {questions.length} questions</div>
+                </>}
+                {result ? <>
+                    <h2 style={{ textAlign: 'center' }}>You Scored {score} out of {questions.length}</h2>
+                    <Button onClick={reset} sx={{ width: '250px', height: '50px', marginLeft: '210px', borderRadius: '8px' }} variant="contained" color='error' size='medium'>Reset</Button></> : <></>}
+            </div>
+            <div>
+                {showStartQuiz && <Navbar />}
+                <button className='exit-button' onClick={handleClick}>Exit</button>
+            </div>
 
         </div>
     )
